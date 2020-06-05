@@ -7,6 +7,8 @@ import java.io.File;  // Import the File class
 import java.io.FileNotFoundException;  // Import this class to handle errors
 import java.util.Scanner; // Import the Scanner class to read text files
 import java.util.Vector;
+import java.io.FileWriter;
+import java.io.IOException;
 
 public class Project_pro extends JFrame implements ActionListener{
 	static int drop_nuber=6; //control drop number
@@ -24,6 +26,7 @@ public class Project_pro extends JFrame implements ActionListener{
     private UserPanel userPane; //JPanel
     private Timer timer; //timer
     static double times=0; //record time
+    static double max_user=0; //record time
     static Image img_turtle,img_mushroom,img_ghost1,img_ghost2,img,backgrounds; //set Image
     static Vector vec_loading = new Vector();
 
@@ -162,7 +165,23 @@ public class Project_pro extends JFrame implements ActionListener{
 
         if(exits){ //Game Over
             timer.stop();
-            JOptionPane.showMessageDialog(main_app,"Hi "+name_label.getText()+", Game Over!\nYou continue: "+Double.toString(times)+" sec","Over",JOptionPane.QUESTION_MESSAGE);
+            try {
+                FileWriter myWriter = new FileWriter("filename.txt");
+                for(int i=0;i<vec_loading.size();i++){
+                    Object objs = vec_loading.get(i);
+                    myWriter.write(objs.toString()+"\n");
+                }
+                myWriter.write(Double.toString(times)+"\n");
+                myWriter.close();
+                System.out.println("Successfully wrote to the file.");
+            } catch (IOException e) {
+                System.out.println("An error occurred.");
+                e.printStackTrace();
+            }
+            if(times>=max_user)
+                JOptionPane.showMessageDialog(main_app,"Hi "+name_label.getText()+",Congratuation to create New Record!\nYou continue: "+Double.toString(times)+" sec","Over",JOptionPane.QUESTION_MESSAGE);
+            else
+                JOptionPane.showMessageDialog(main_app,"Hi "+name_label.getText()+", Game Over!\nYou continue: "+Double.toString(times)+" sec","Over",JOptionPane.QUESTION_MESSAGE);
             System.exit(0);
         }
 
@@ -182,7 +201,7 @@ public class Project_pro extends JFrame implements ActionListener{
             Scanner myReader = new Scanner(input_file);
             while (myReader.hasNextLine()) {
                 String data = myReader.nextLine();
-                vec_loading.add(new Double(Double.parseDouble(data)));
+                vec_loading.add(Double.parseDouble(data));
                 System.out.println(Double.parseDouble(data));
             }
             myReader.close();
@@ -190,8 +209,11 @@ public class Project_pro extends JFrame implements ActionListener{
         catch (FileNotFoundException e) {
             System.out.println("An error occurred.");
         }
-        for(int i=0;i<vec_loading.size();i++)
-            System.out.println(vec_loading[i]); 
+        for(int i=0;i<vec_loading.size();i++){
+            Object objs = vec_loading.get(i);
+            if(max_user<(Double)objs)
+                max_user=(Double)objs;
+        }
     }
     /* Input Name End */
 

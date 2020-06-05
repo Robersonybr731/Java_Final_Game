@@ -5,6 +5,7 @@ import java.util.Random;
 import java.text.DecimalFormat;
 
 public class Project_pro extends JFrame implements ActionListener{
+	static int namessss;
     static Project_pro main_app; //JFrame
     static int move; // determine left or right
     static int move_x=280; //character location x

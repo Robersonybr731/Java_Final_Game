@@ -21,6 +21,7 @@ public class Project_pro extends JFrame implements ActionListener{
     static int []dropSize=new int[20]; //drop Size
     static JLabel name_label; //uers name
     static JLabel time_label; //time
+    static JButton record_button; //record
     static boolean clock_con=false; //check wether timer control
     static boolean exits=false; //check wether exit
     private UserPanel userPane; //JPanel
@@ -80,17 +81,18 @@ public class Project_pro extends JFrame implements ActionListener{
     /*JFrame constructer*/
     public Project_pro() { 
         super("Dodge Ball Game.");
-        timer = new Timer(100, this);
+        timer = new Timer(100, this); //set timer each  is 0.1s
         timer.setInitialDelay(0);
         Container c = getContentPane(); //container
         c.setLayout(new FlowLayout());
         c.setBackground(Color.white);
         userPane = new UserPanel(); //JPanel
         userPane.setBorder(BorderFactory.createLineBorder(Color.red));
+        
         c.add(userPane);
         c.add(name_label);
         c.add(time_label);
-        
+        c.add(record_button);
 
 
         timer.start();
@@ -188,14 +190,17 @@ public class Project_pro extends JFrame implements ActionListener{
         userPane.repaint();  //ReDraw
      }
 
-     /* Input Name */
-     static void enter_name(){
+    /* Initial Setting */
+    static void init_setting(){
+
+        /* setting name */
         String names=JOptionPane.showInputDialog(main_app,"Enter Your Name!","Name.",JOptionPane.QUESTION_MESSAGE);
         if(names.length()==0)
             names="Roberson";
         JOptionPane.showMessageDialog(main_app,"Hi "+names+", Welcome to ball game!","Name Confirm",JOptionPane.QUESTION_MESSAGE);
         name_label=new JLabel(names);
-        time_label=new JLabel("0.0");
+
+        /* Load Record File */
         try {
             File input_file = new File("filename.txt");
             Scanner myReader = new Scanner(input_file);
@@ -209,16 +214,13 @@ public class Project_pro extends JFrame implements ActionListener{
         catch (FileNotFoundException e) {
             System.out.println("An error occurred.");
         }
-        for(int i=0;i<vec_loading.size();i++){
+        for(int i=0;i<vec_loading.size();i++){ //compute max record
             Object objs = vec_loading.get(i);
             if(max_user<(Double)objs)
                 max_user=(Double)objs;
         }
-    }
-    /* Input Name End */
 
-    /* Image setting */
-    static void img_setting(){
+        /* Setting image */
         Toolkit toolkit = Toolkit.getDefaultToolkit();
         img_ghost1 = toolkit.getImage("ghost_left.png");
         img_ghost2 = toolkit.getImage("ghost_right.png");
@@ -227,18 +229,22 @@ public class Project_pro extends JFrame implements ActionListener{
         backgrounds=toolkit.getImage("background1.jpg");
         img=img_ghost1;
 
+        /* Setting Initial image Location and Size */
         for(int i=0;i<20;i++) //set different init x location
             dropx[i]=(int)(Math.random()*525)+15;
         for(int i=0;i<20;i++) //set different init y location
             dropy[i]=(int)(Math.random()*20)-30;
         for(int i=0;i<20;i++) //set different init drop size
             dropSize[i]=50;
+
+        /* Clock Label Setting */
+        time_label=new JLabel("0.0");
+        record_button=new JButton("Rank");
     }
-    /* Image setting End */
+    /* Initial setting END */
 
     public static void main ( String[] args ){
-        enter_name(); //Input Name
-        img_setting();
+        init_setting(); //initial_setting
         main_app = new Project_pro();
         main_app.setDefaultCloseOperation(EXIT_ON_CLOSE); //close
         main_app.setSize(600, 700);

@@ -21,7 +21,6 @@ public class Project_pro extends JFrame implements ActionListener{
     static int []dropSize=new int[20]; //drop Size
     static JLabel name_label; //uers name
     static JLabel time_label; //time
-    static JButton record_button; //record
     static boolean clock_con=false; //check wether timer control
     static boolean exits=false; //check wether exit
     private UserPanel userPane; //JPanel
@@ -56,11 +55,13 @@ public class Project_pro extends JFrame implements ActionListener{
                     if(move_x-5>=10)
                         move_x-=5;
                     img=img_ghost1;
+                    System.out.println("pppppppppppppppppp");
                 }
                 else if(move==1){ //right
                     if(move_x+5<=520)
                         move_x+=5;
                     img=img_ghost2;
+                    System.out.println("oooooooooooooooo");
                 }
             }
             else //if is timer event
@@ -92,7 +93,7 @@ public class Project_pro extends JFrame implements ActionListener{
         c.add(userPane);
         c.add(name_label);
         c.add(time_label);
-        c.add(record_button);
+        
 
 
         timer.start();
@@ -103,11 +104,18 @@ public class Project_pro extends JFrame implements ActionListener{
                 switch (e.getKeyCode()) {
                     case KeyEvent.VK_LEFT:
                         move=0;
+                        System.out.println("aaaaaaaaaaaa");
                         repaint();
                         break;
                     case KeyEvent.VK_RIGHT:
                         move=1;
+                        System.out.println("Bbbbbbbbbb");
                         repaint();
+                        break;
+                    case KeyEvent.VK_R:
+                        timer.stop();
+                        JOptionPane.showMessageDialog(main_app,"Hi "+name_label.getText()+",Congratuation to create New Record!\nYou continue: "+Double.toString(times)+" sec","Over",JOptionPane.QUESTION_MESSAGE);
+                        timer.restart();
                         break;
                     default: move=-1;
                 }
@@ -239,7 +247,6 @@ public class Project_pro extends JFrame implements ActionListener{
 
         /* Clock Label Setting */
         time_label=new JLabel("0.0");
-        record_button=new JButton("Rank");
     }
     /* Initial setting END */
 

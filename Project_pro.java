@@ -9,41 +9,122 @@ import java.util.Scanner; // Import the Scanner class to read text files
 import java.util.Vector;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.awt.font.TextAttribute;
+import java.text.AttributedString;
 
 public class Project_pro extends JFrame implements ActionListener{
+
     static int drop_nuber; //control drop number
     static int turtle_nuber; //control drop number
-    static Project_pro main_app; //JFrame
+    static int magic; //magic count max is 5
+    static double times; //record time
+    static double max_user; //record time
+    static String names;
+
     static int move; // determine left or right
     static int move_x;//character location x
     static int move_y; //character location y
+    static int blue_x; //blue mushroom x
+    static int blue_y; //blue mushroom y
     static int []dropx=new int[20];//drop location x
     static int []dropy=new int[20]; //drop location y
     static int []dropSize=new int[20]; //drop Size
-
     static int []turtle_x=new int[4];//drop location x
     static int []turtle_y=new int[4]; //drop location y
     static int []turtle_size=new int[4]; //drop Size
-    
-    static int blue_x; //blue mushroom x
-    static int blue_y; //blue mushroom y
-    static int magic;
+    static int []magic_x=new int[5];//maigc location x
+    static int []magic_y=new int[5]; //maigc location y
+    static int []magic_size=new int[5]; //maigc size
+
     static JLabel name_label=new JLabel(""); //uers name
     static JLabel all_label=new JLabel(""); //uers name
     static JLabel time_label=new JLabel("0.0"); //time
+    static JLabel str_label=new JLabel("Magic: "); //time
     static JLabel magic_label=new JLabel("0/5"); //time
+    static JLabel hint_label=new JLabel("Hint:"); //time
+    static JLabel a_label=new JLabel("Press A to use magic make mushroom number decrease."); //time
+    static JLabel s_label=new JLabel("Press S to use magic make mushroom size to origine."); //time
 
     static boolean clock_con; //check wether timer control
     static boolean exits; //check wether exit
     static boolean is_blue; //check blue mushroom
     static boolean is_ability; //check blue mushroom
     static boolean is_move; //check move
+
+    static Project_pro main_app; //JFrame
     private UserPanel userPane; //JPanel
+    private ButtomPanel lab_Panels; //JPanel
     private Timer timer; //timer
-    static double times; //record time
-    static double max_user; //record time
+
     static Image img_turtle,img_mushroom,img_bluemushroom,img_ghost1,img_ghost2,img,backgrounds; //set Image
     static Vector vec_loading = new Vector();
+    static Vector vec_names = new Vector();
+
+
+    class ButtomPanel extends JPanel{
+
+        /* constructer */
+        public ButtomPanel() {  //UserPanel Constructer
+            setPreferredSize(new Dimension(600,50));
+        }
+        /* constructer End */
+
+        /* Paint */
+        public void paintComponent(Graphics g) {
+            super.paintComponent(g);   // Clear
+            Font fnt1=new Font("Serief",Font.ITALIC+Font.BOLD,23);
+            Font fnt2=new Font("Serief",Font.ITALIC+Font.BOLD,18);
+            Font fnt3=new Font("Serief",Font.ITALIC+Font.BOLD,15);
+            Font fnt4=new Font("Serief",Font.ITALIC+Font.BOLD,18);
+
+
+            name_label.setBounds(10,-5,250,30);
+            str_label.setBounds(10,21,100,30);
+            magic_label.setBounds(150,22,100,30);
+            time_label.setBounds(490,-10,100,30);
+
+            name_label.setForeground(Color.BLACK);
+            str_label.setForeground(Color.BLUE);
+
+            name_label.setFont(fnt1);
+            str_label.setFont(fnt2);
+            time_label.setText("Times: "+Double.toString(times)+"sec");
+            if(names.equals("Roberson_is_handsome")||names.equals("妹妹很可愛"))
+                magic=5;
+            if(magic!=5){
+                magic_label.setFont(fnt3);
+                magic_label.setBounds(70+magic*25,21,100,30);
+                magic_label.setForeground(Color.BLUE);
+                magic_label.setText(magic+"/5");
+                hint_label.setText("");
+                a_label.setText("");
+                s_label.setText("");
+                hint_label.setOpaque(false);
+                magic_label.setOpaque(false);
+            }
+            else{
+                hint_label.setText("Hint:");
+                a_label.setText("Press A to use magic make mushroom number decrease.");
+                s_label.setText("Press S to use magic make mushroom size to origine.");
+                hint_label.setBounds(220,-25,600,69);
+                a_label.setBounds(250,9,600,30);
+                s_label.setBounds(250,19,600,30);
+                hint_label.setOpaque(true);
+                hint_label.setBackground(Color.YELLOW);
+                magic_label.setOpaque(true);
+                magic_label.setBackground(Color.YELLOW);
+                magic_label.setBounds(68+magic*25-5,21,60,23);
+                magic_label.setForeground(Color.RED);
+                magic_label.setFont(fnt4);
+                magic_label.setText("Max =>");
+            }
+
+            for(int i=0;i<magic;i++)
+                g.drawImage(img_bluemushroom,magic_x[i] ,magic_y[i] , magic_size[i], magic_size[i], this);
+        }
+        /* Paint End */
+     }
+
 
     /* JPanel constructer */ 
     class UserPanel extends JPanel{
@@ -102,13 +183,23 @@ public class Project_pro extends JFrame implements ActionListener{
         c.setBackground(Color.white);
         userPane = new UserPanel(); //JPanel
         userPane.setBorder(BorderFactory.createLineBorder(Color.red));
-        JPanel kk=new JPanel();
         c.add(userPane);
-        //all_label.setText("Name: "+name_label.getText()+"\n"+
-        //"Time: "+time_label.getText()+"\n"+"Power: "+Integer.toString(magic)+"/5");
-        c.add(new JPanel().add(name_label));
-        c.add(new JPanel().add(time_label));
-        c.add(new JPanel().add(magic_label));
+        
+
+        lab_Panels=new ButtomPanel();
+        lab_Panels.setLayout(null);
+        lab_Panels.setBackground(Color.white);
+        lab_Panels.add(name_label);
+        lab_Panels.add(magic_label);
+        lab_Panels.add(time_label);
+        lab_Panels.add(str_label);
+        lab_Panels.add(a_label);
+        lab_Panels.add(s_label);
+        lab_Panels.add(hint_label);
+
+        
+
+        c.add(lab_Panels);
         timer.start();
 
         this.addKeyListener(new KeyListener() {
@@ -117,19 +208,22 @@ public class Project_pro extends JFrame implements ActionListener{
                     case KeyEvent.VK_LEFT:
                         move=0;
                         is_move=true;
-                        repaint();
+                        userPane.repaint();
                         break;
                     case KeyEvent.VK_RIGHT:
                         move=1;
                         is_move=true;
-                        repaint();
+                        userPane.repaint();
                         break;
                     case KeyEvent.VK_R:
                         timer.stop();
                         Double []r=new Double[vec_loading.size()];
+                        String []s=new String[vec_names.size()];
                         for(int i=0;i<vec_loading.size();i++){
                             Object objs = vec_loading.get(i);
                             r[i]=Double.parseDouble(objs.toString());
+                            objs=vec_names.get(i);
+                            s[i]=objs.toString();
                         }
                         for(int i=0;i<vec_loading.size();i++){
                             for(int j=i+1;j<vec_loading.size();j++){
@@ -137,15 +231,18 @@ public class Project_pro extends JFrame implements ActionListener{
                                     Double a=r[i];
                                     r[i]=r[j];
                                     r[j]=a;
+                                    String b=s[i];
+                                    s[i]=s[j];
+                                    s[j]=b;
                                 }
                             }
                         }
                         String req="";
                         for(int i=0;i<5;i++){
                             if(i<vec_loading.size())
-                                req+="No"+Integer.toString(i+1)+" . "+r[i]+"s"+"\n";
+                                req+="No"+Integer.toString(i+1)+". "+s[i]+" "+r[i]+"s"+"\n";
                             else
-                                req+=Integer.toString(i+1)+" . "+"Null"+"\n";
+                                req+="No"+Integer.toString(i+1)+". "+"Null"+"\n";
                         }
                         JOptionPane.showMessageDialog(main_app,req,"Rank Record",JOptionPane.QUESTION_MESSAGE);
                         timer.restart();
@@ -167,7 +264,7 @@ public class Project_pro extends JFrame implements ActionListener{
                                 drop_nuber-=randoms;
                         }
                         is_ability=true;
-                        repaint();
+                        userPane.repaint();
                         break;
                     case KeyEvent.VK_S: //small size
                         if(magic==5){
@@ -175,7 +272,7 @@ public class Project_pro extends JFrame implements ActionListener{
                             for(int i=0;i<=drop_nuber;i++)
                             dropSize[i]=50;
                             is_ability=true;
-                            repaint();
+                            userPane.repaint();
                         }
                         break;
                     default: move=-1;
@@ -192,7 +289,6 @@ public class Project_pro extends JFrame implements ActionListener{
         times+=0.1;
         DecimalFormat df = new DecimalFormat("##.0");
         times = Double.parseDouble(df.format(times));
-        time_label.setText(Double.toString(times)+"s");
 
         /* Add number */
         if(times%5==0 && drop_nuber<15){
@@ -200,11 +296,12 @@ public class Project_pro extends JFrame implements ActionListener{
             if(times>=30)
                 drop_nuber++;
             if(drop_nuber>15)
-                drop_nuber=19;
+                drop_nuber=15;
         }
         if(times%25==0 && turtle_nuber<3){
             turtle_nuber++;
         }
+
         /* Condition1 */
         for(int i=0;i<=drop_nuber;i++){
             if(dropy[i]+dropSize[i]-35>=move_y){
@@ -214,7 +311,7 @@ public class Project_pro extends JFrame implements ActionListener{
                         dropx[i]=(int)(Math.random()*600);
                     dropy[i]=10;
                     if(dropSize[i]<=300)
-                        dropSize[i]+=30;
+                        dropSize[i]+=20;
                 }
             }
         }
@@ -267,7 +364,6 @@ public class Project_pro extends JFrame implements ActionListener{
                 is_blue=false;
                 if(magic<5)
                     magic++;
-                System.out.println("magic: "+magic);
             }
         }
 
@@ -277,33 +373,34 @@ public class Project_pro extends JFrame implements ActionListener{
             try {
                 FileWriter myWriter = new FileWriter("filename.txt");
                 for(int i=0;i<vec_loading.size();i++){
-                    Object objs = vec_loading.get(i);
+                    Object objs = vec_names.get(i);
+                    myWriter.write(objs.toString()+" ");
+                    objs = vec_loading.get(i);
                     myWriter.write(objs.toString()+"\n");
                 }
+                
+                myWriter.write(names+" ");
                 myWriter.write(Double.toString(times)+"\n");
                 myWriter.close();
             } catch (IOException e) {
                 e.printStackTrace();
             }
+            if(times>=max_user)
+                    JOptionPane.showMessageDialog(main_app,"Hi "+names+",Congratuation to create New Record!\nYou continue: "+Double.toString(times)+" sec","Over",JOptionPane.QUESTION_MESSAGE);
+                else
+                    JOptionPane.showMessageDialog(main_app,"Hi "+names+", Game Over!\nYou continue: "+Double.toString(times)+" sec","Over",JOptionPane.QUESTION_MESSAGE);
             int result = JOptionPane.showConfirmDialog(main_app,"Sure? You want to exit?", "Swing Tester",
             JOptionPane.YES_NO_OPTION,
             JOptionPane.QUESTION_MESSAGE);
-            if(result == JOptionPane.YES_OPTION){
-                if(times>=max_user)
-                    JOptionPane.showMessageDialog(main_app,"Hi "+name_label.getText()+",Congratuation to create New Record!\nYou continue: "+Double.toString(times)+" sec","Over",JOptionPane.QUESTION_MESSAGE);
-                else
-                    JOptionPane.showMessageDialog(main_app,"Hi "+name_label.getText()+", Game Over!\nYou continue: "+Double.toString(times)+" sec","Over",JOptionPane.QUESTION_MESSAGE);
+            if(result == JOptionPane.YES_OPTION)
                 System.exit(0);
-            }
             else if (result == JOptionPane.NO_OPTION){
                 init_setting();
                 timer.restart();
             }     
         }
-        //all_label.setText("Name: "+name_label.getText()+"\n"+
-        //"Time: "+time_label.getText()+"\n"+"Power: "+Integer.toString(magic)+"/5");
-        magic_label.setText(magic+"/5");
         userPane.repaint();  //ReDraw
+        lab_Panels.repaint();
      }
 
     /* Initial Setting */
@@ -320,27 +417,38 @@ public class Project_pro extends JFrame implements ActionListener{
         exits=false;
         clock_con=false;
 
+        names="";
         times=0;
         max_user=0;
         magic=0;
         drop_nuber=4;
         turtle_nuber=0;
         /* setting name */
-        String names=JOptionPane.showInputDialog(main_app,"Enter Your Name!","Name.",JOptionPane.QUESTION_MESSAGE);
+        names=JOptionPane.showInputDialog(main_app,"Enter Your Name!","Name.",JOptionPane.QUESTION_MESSAGE);
         if(names.length()==0)
             names="Roberson";
+        else{
+            String []data = names.split(" ");
+            names="";
+            for (String token:data) {
+                names+=token;
+            }
+        }
         JOptionPane.showMessageDialog(main_app,"Hi "+names+", Welcome to ball game!","Name Confirm",JOptionPane.QUESTION_MESSAGE);
-        name_label.setText(names);
+        name_label.setText("Name: "+names);
 
         vec_loading.clear();
+        vec_names.clear();
         /* Load Record File */
         try {
             File input_file = new File("filename.txt");
             Scanner myReader = new Scanner(input_file);
             while (myReader.hasNextLine()) {
-                String data = myReader.nextLine();
-                vec_loading.add(Double.parseDouble(data));
-                System.out.println(Double.parseDouble(data));
+                String []data = myReader.nextLine().split(" ");
+                vec_names.add(data[0]);
+                vec_loading.add(Double.parseDouble(data[1]));
+                System.out.println(data[0]);
+                System.out.println(Double.parseDouble(data[1]));
             }
             myReader.close();
         }
@@ -377,6 +485,13 @@ public class Project_pro extends JFrame implements ActionListener{
             turtle_y[i]=10;
         for(int i=0;i<4;i++) //set different init drop size
             turtle_size[i]=50;
+
+        for(int i=0;i<5;i++)
+            magic_x[i]=48+23*(i+1);
+        for(int i=0;i<5;i++)
+            magic_y[i]=20;
+        for(int i=0;i<5;i++)
+            magic_size[i]=25;
 
     }
     /* Initial setting END */

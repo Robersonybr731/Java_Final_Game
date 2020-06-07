@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.awt.font.TextAttribute;
 import java.text.AttributedString;
 
+
 public class Project_pro extends JFrame implements ActionListener{
 
     static int drop_nuber; //control drop number
@@ -55,6 +56,7 @@ public class Project_pro extends JFrame implements ActionListener{
     private UserPanel userPane; //JPanel
     private ButtomPanel lab_Panels; //JPanel
     private Timer timer; //timer
+
 
     static Image img_turtle,img_mushroom,img_bluemushroom,img_ghost1,img_ghost2,img,backgrounds; //set Image
     static Vector vec_loading = new Vector();
@@ -185,7 +187,6 @@ public class Project_pro extends JFrame implements ActionListener{
         userPane.setBorder(BorderFactory.createLineBorder(Color.red));
         c.add(userPane);
         
-
         lab_Panels=new ButtomPanel();
         lab_Panels.setLayout(null);
         lab_Panels.setBackground(Color.white);
@@ -196,10 +197,10 @@ public class Project_pro extends JFrame implements ActionListener{
         lab_Panels.add(a_label);
         lab_Panels.add(s_label);
         lab_Panels.add(hint_label);
-
-        
-
         c.add(lab_Panels);
+
+
+
         timer.start();
 
         this.addKeyListener(new KeyListener() {
@@ -325,14 +326,14 @@ public class Project_pro extends JFrame implements ActionListener{
 
         /* Condition2 */
         for(int i=0;i<=drop_nuber;i++) //if down to horizon
-            if(dropy[i]+dropSize[i]>=600){
+            if(dropy[i]+dropSize[i]>=650){
                 dropx[i]=(int)(Math.random()*600);
                 while(dropx[i]<=0||dropx[i]+dropSize[i]>=600)
                     dropx[i]=(int)(Math.random()*600);
                 dropy[i]=10;
             }
         for(int i=0;i<=turtle_nuber;i++) //if down to horizon
-            if(turtle_y[i]+turtle_size[i]>=600){
+            if(turtle_y[i]+turtle_size[i]>=650){
                 turtle_x[i]=(int)(Math.random()*600);
                 while(turtle_x[i]<=0||turtle_x[i]+turtle_size[i]>=600)
                     turtle_x[i]=(int)(Math.random()*600);
@@ -348,7 +349,7 @@ public class Project_pro extends JFrame implements ActionListener{
         /* Magic */
         if(times%5==0) //drop blue
             is_blue=true;
-        if(blue_y+50>=600){ //horizon
+        if(blue_y+50>=650){ //horizon
             blue_x=(int)(Math.random()*600);
             while(blue_x<=0||blue_x+50>=600)
                 blue_x=(int)(Math.random()*600);

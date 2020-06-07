@@ -427,11 +427,11 @@ public class Project_pro extends JFrame implements ActionListener{
         names=JOptionPane.showInputDialog(main_app,"Enter Your Name!","Name.",JOptionPane.QUESTION_MESSAGE);
         if(names.length()==0)
             names="Roberson";
-        else{
-            String []data = names.split(" ");
-            names="";
-            for (String token:data) {
-                names+=token;
+        else if(names.indexOf(" ")!=-1){
+            while(names.indexOf(" ")!=-1){
+                int z=names.indexOf(" ");
+                String myName = names;
+                names = myName.substring(0,z)+'_'+myName.substring(z+1);
             }
         }
         JOptionPane.showMessageDialog(main_app,"Hi "+names+", Welcome to ball game!","Name Confirm",JOptionPane.QUESTION_MESSAGE);

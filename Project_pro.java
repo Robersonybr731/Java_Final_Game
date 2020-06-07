@@ -199,8 +199,6 @@ public class Project_pro extends JFrame implements ActionListener{
         lab_Panels.add(hint_label);
         c.add(lab_Panels);
 
-
-
         timer.start();
 
         this.addKeyListener(new KeyListener() {
@@ -390,7 +388,7 @@ public class Project_pro extends JFrame implements ActionListener{
                     JOptionPane.showMessageDialog(main_app,"Hi "+names+",Congratuation to create New Record!\nYou continue: "+Double.toString(times)+" sec","Over",JOptionPane.QUESTION_MESSAGE);
                 else
                     JOptionPane.showMessageDialog(main_app,"Hi "+names+", Game Over!\nYou continue: "+Double.toString(times)+" sec","Over",JOptionPane.QUESTION_MESSAGE);
-            int result = JOptionPane.showConfirmDialog(main_app,"Sure? You want to exit?", "Swing Tester",
+            int result = JOptionPane.showConfirmDialog(main_app,"Sure? You want to exit?", "Restart",
             JOptionPane.YES_NO_OPTION,
             JOptionPane.QUESTION_MESSAGE);
             if(result == JOptionPane.YES_OPTION)

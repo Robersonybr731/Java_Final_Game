@@ -444,6 +444,8 @@ public class Project_pro extends JFrame implements ActionListener{
 
         /* setting name */
         names=JOptionPane.showInputDialog(main_app,"Enter Your Name!","Name.",JOptionPane.QUESTION_MESSAGE);
+		if (names == null)
+			System.exit(0);
         if(names.length()==0) //Default
             names="Roberson";
         else if(names.indexOf(" ")!=-1){  // " " convert to "_"
